@@ -13,6 +13,7 @@
             string alfabet = "abcdefghijklmnopqrstuvwxyz";
             int[] frecventa = new int[alfabet.Length];
 
+            // Parcurgem intreg textul pentru a construi vectorul de frecventa al acestuia
             for (int i = 0; i < text.Length; i++)
             {
                 // Gasim indexul caracterului curent in alfabet
@@ -25,41 +26,50 @@
                 frecventa[index]++;
             }
 
-            // maxBar decide care este numarul maxim de caractere '█' pentru afisarea unei bare intregi din barchart
+            // maxBar decide care este numarul maxim de caractere '█' pentru afisarea unei bare intregi din bar chart
             int maxBar = 180;
             // maxFreq este folosit la calcul, pentru procentele fiecarei frecvente
             int maxFreq = frecventa.Max();
-            // Afisam caracterele in ordinea descrescatoare a frecventei
+
             for (int i = 0; i < frecventa.Length; i++)
             {
                 Console.Write($"{i + 1}.\t{alfabet[i]} ->\t{frecventa[i]}\t");
-
                 float percent = (float)frecventa[i] / maxFreq;
-                // repetam caracterul '█' folosind procentul frecventei curente, inmultit cu dimensiunea maxima a barei
-                var bar = Enumerable.Repeat('█', (int)(percent * maxBar));
 
-                // Inainte de afisare, schimbam culoarea in functie de procent
-                if (percent > 0.75)
-                    Console.ForegroundColor = ConsoleColor.Red;
-                else if (percent > 0.5)
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                else
-                    Console.ForegroundColor = ConsoleColor.Green;
+                // Repetam caracterul '█' folosind procentul frecventei curente, inmultit cu dimensiunea maxima a barei
+                var bar = Enumerable.Repeat('█', (int)(percent * maxBar) + 1);
 
-                // folosind Join, lipim toate caracterele dintr-o colectie (array, lista etc) cu un separator
+                // Inainte de afisare, schimbam culoarea textului (foreground, nu background) in functie de procent.
+                // Acesta este un switch cu pattern matching, in care putem pune si conditii ca si in if, else if-uri
+                Console.ForegroundColor = percent switch
+                {
+                    > 0.8f => ConsoleColor.DarkRed,
+                    > 0.7f => ConsoleColor.Red,
+                    > 0.5f => ConsoleColor.DarkYellow,
+                    > 0.3f => ConsoleColor.Yellow,
+                    > 0.2f => ConsoleColor.Green,
+                    _ => ConsoleColor.DarkGreen,
+                };
+
+                // Folosind Join, lipim toate caracterele dintr-o colectie (array, lista etc) cu un separator
                 // (in cazul asta, caracterul gol, pentru a fi o bara uniforma)
                 Console.WriteLine(string.Join("", bar));
+                Console.WriteLine();
 
                 // La final, resetam culoarea pentru urmatoarea linie
                 Console.ResetColor();
             }
             Console.WriteLine();
 
-            char[] characters = alfabet.ToCharArray();
             // Insertion sort
+            char[] characters = alfabet.ToCharArray();
+            // Unul dintre for-uri trebuie sa aiba parcurgere inainte...
             for (int i = 1; i < frecventa.Length; i++)
+                // Iar celalalt for trebuie sa aiba parcurgere inapoi pentru ca sortarea sa functioneze corect
                 for (int j = i; j > 0; j--)
                 {
+                    // Dorim cele mai mari frecvente la inceput, deci comparam daca elementul de pe pozitia j
+                    // este mai mare decat elementul de pe pozitia j - 1 (valorile cele mai mari trebuie pe pozitiile cele mai mici)
                     if (frecventa[j] > frecventa[j - 1])
                     {
                         // Swap pe vectorul frecventa
