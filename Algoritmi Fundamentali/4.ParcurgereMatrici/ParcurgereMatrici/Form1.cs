@@ -198,7 +198,7 @@ namespace ParcurgereMatrici
                     }
                 }
             */
-            // Mai simplu / scurt
+            // Mai simplu / scurt: parcurgem doar cat este nevoie, si folosim indicii adecvati
             for (int i = 0; i < n / 2; i++)
                 for (int j = i + 1; j < n - i - 1; j++)
                 {
@@ -248,7 +248,7 @@ namespace ParcurgereMatrici
 
             // Chenar: parcurgem prima linie, ultima coloana, ultima linie, prima coloana
             // Spirala: mai adaugam un for cu k de la 0 pana la n/2, iar in codul interior,
-            // in loc de 0 scriem kk, iar in loc de n-1 scriem n-k-1
+            // in loc de 0 scriem k, iar in loc de n-1 scriem n-k-1
             for (int k = 0; k < n / 2; k++)
             {
                 for (int i = k; i < n - k - 1; i++)
